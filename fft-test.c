@@ -30,6 +30,8 @@
 #include <time.h>
 #include "fft.h"
 
+#include "doug_fft_test.h"
+
 
 // Private function prototypes
 static void test_fft(int n);
@@ -52,6 +54,11 @@ static double max_log_error = -INFINITY;
 int main(void) {
 	srand(time(NULL));
 	
+	doug_test();
+	return 0;
+
+	// original
+
 	// Test power-of-2 size FFTs
 	for (int i = 0; i <= 12; i++)
 		test_fft(1 << i);
