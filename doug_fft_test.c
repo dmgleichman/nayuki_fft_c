@@ -27,11 +27,13 @@ double imag[RADIX];
 double magnitudeValue[RADIX];
 double phaseValue[RADIX];
 
+double hamming[RADIX];
+
 double g_amplitude;
 double g_freq;
 double g_phase;
 
-void make_sin_wave(double amplitude, double freq, double phase)
+void make_cos_wave(double amplitude, double freq, double phase)
 {
 	int i;
 	for (i=0; i<RADIX; i++)
@@ -54,12 +56,36 @@ void calcualte_magnitude_and_phase(void)
 }
 
 
+
+// Hamming Window w(n)Hamming = 0.54 – 0.46cos(2pn/N)
+void make_hamming_window(void)
+{
+	int i;
+	for (i=0; i<RADIX; i++)
+	{
+		hamming[i] = 0.54 - (0.46 * cos(2 * PI * i / RADIX));
+	}
+}
+
+void apply_hamming_window(void)
+{
+	int i;
+	for (i=0; i<RADIX; i++)
+	{
+		real[i] = real[i] * hamming[i];
+	}
+}
+
 void doug_test(void)
 {
 	printf("Running doug_test.c\n");
 
-	make_sin_wave(1000, (16.0/128.0), (32.0/128.0));
+	g_freq = 10.5;
 
+	make_cos_wave(1, (g_freq/128.0), (0.0/128.0));
+
+	make_hamming_window();
+	apply_hamming_window();
 	Fft_transformRadix2(real, imag, RADIX);
 
 	calcualte_magnitude_and_phase();
